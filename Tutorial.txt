@@ -1,0 +1,63 @@
+## Preparando BD pra conexão com JAVA ##
+
+1- Criar um DATABASE(DB) qualquer em mysql
+	mysql>create database NOME_DO_DB;
+
+2- Selecionar o DB criado
+	mysql>use NOME_DO_DB;
+
+3- Criar um usuário para conexão (tentei com o root, mas nao sei pq nao dava certo)
+	mysql>CREATE USER 'nome_do_usuario'@'localhost' IDENTIFIED BY 'senha_de_login';
+
+4- Conferir todas as permissões a ele
+	mysql>GRANT ALL PRIVILEGES ON *.* TO 'nome_do_usuario'@'localhost' IDENTIFIED BY 'senha_de_login' WITH GRANT OPTION;
+	mysql>FLUSH PRIVILEGES;
+
+## Conectando ao DB criado ##
+
+1- Entra no Eclipse e cria projeto java e tudo mais...
+
+2- Baixa o driver mysql-java https://dev.mysql.com/downloads/connector/j/, extrai e procura o arquivo mysql-connector-java-8.0.15.jar
+
+3- Pega esse .jar e copia ele (ctrl+c mesmo) ae vai na pasta do seu projeto java e cola nela (botao direito mouse em java project e colar), ele deve aparecer listado
+
+4- Cria um classe ConnectionFactory(pode ser o nome que quiser) e insira o seguinte código
+	
+	import java.sql.Connection;
+	import java.sql.DriverManager;
+	import java.sql.SQLException;
+
+public class ConnectionFactory {
+	public Connection getConnection() {
+        try {
+            return DriverManager.getConnection(
+                    "jdbc:mysql://localhost/NOME_DO_DB", "nome_do_usuario","senha_de_login");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+}
+
+5- Testar conexao ao DB criado em mysql criando uma classe de Teste com um método main
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+public class Teste {
+	public static void main(String[] args) throws SQLException {
+	  Connection connection = new ConnectionFactory().getConnection();
+          System.out.println("Conexão realizada com sucesso!");
+          connection.close();
+	}
+
+}
+
+6- Selecione o arquivo .jar do mysql, clique da direita e escolha Build Path, Add to Build Path
+
+7- Executa o programa e vê se imprime tudo certinho
+
+Qualquer duvida deem uma olhada no Cap 2 do caelum, link ta no dontpad.com/grupo10fes2019
+
+
+
